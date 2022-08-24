@@ -29,7 +29,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/evvv_vvve/yukimi">
+  <a href="https://github.com/evvv-vvve/yukimi">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -38,14 +38,14 @@
   <p align="center">
     project_description
     <br />
-    <a href="https://github.com/evvv_vvve/yukimi"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/evvv-vvve/yukimi"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/evvv_vvve/yukimi">View Demo</a>
+    <a href="https://github.com/evvv-vvve/yukimi">View Demo</a>
     ·
-    <a href="https://github.com/evvv_vvve/yukimi/issues">Report Bug</a>
+    <a href="https://github.com/evvv-vvve/yukimi/issues">Report Bug</a>
     ·
-    <a href="https://github.com/evvv_vvve/yukimi/issues">Request Feature</a>
+    <a href="https://github.com/evvv-vvve/yukimi/issues">Request Feature</a>
   </p>
 </div>
 
@@ -106,7 +106,7 @@ This is an example of how to list things you need to use the software and how to
 1. Get a free API Key at [https://example.com](https://example.com)
 2. Clone the repo
    ```sh
-   git clone https://github.com/evvv_vvve/yukimi.git
+   git clone https://github.com/evvv-vvve/yukimi.git
    ```
 3. Install NPM packages
    ```sh
@@ -140,7 +140,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 - [ ] Feature 3
     - [ ] Nested Feature
 
-See the [open issues](https://github.com/evvv_vvve/yukimi/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/evvv-vvve/yukimi/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -178,7 +178,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Your Name - [@evvv_vvve](https://twitter.com/evvv_vvve) - evvv_vvve@proton.me
 
-Project Link: [https://github.com/evvv_vvve/yukimi](https://github.com/evvv_vvve/yukimi)
+Project Link: [https://github.com/evvv-vvve/yukimi](https://github.com/evvv-vvve/yukimi)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -198,13 +198,13 @@ Project Link: [https://github.com/evvv_vvve/yukimi](https://github.com/evvv_vvve
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/evvv_vvve/yukimi.svg?style=for-the-badge
-[contributors-url]: https://github.com/evvv_vvve/yukimi/graphs/contributors
+[contributors-url]: https://github.com/evvv-vvve/yukimi/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/evvv_vvve/yukimi.svg?style=for-the-badge
-[forks-url]: https://github.com/evvv_vvve/yukimi/network/members
+[forks-url]: https://github.com/evvv-vvve/yukimi/network/members
 [stars-shield]: https://img.shields.io/github/stars/evvv_vvve/yukimi.svg?style=for-the-badge
-[stars-url]: https://github.com/evvv_vvve/yukimi/stargazers
+[stars-url]: https://github.com/evvv-vvve/yukimi/stargazers
 [issues-shield]: https://img.shields.io/github/issues/evvv_vvve/yukimi.svg?style=for-the-badge
-[issues-url]: https://github.com/evvv_vvve/yukimi/issues
+[issues-url]: https://github.com/evvv-vvve/yukimi/issues
 [license-shield]: https://img.shields.io/github/license/evvv_vvve/yukimi.svg?style=for-the-badge
-[license-url]: https://github.com/evvv_vvve/yukimi/blob/master/LICENSE.txt
+[license-url]: https://github.com/evvv-vvve/yukimi/blob/master/LICENSE.txt
 [product-screenshot]: images/screenshot.png
