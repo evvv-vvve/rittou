@@ -69,9 +69,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `evvv_vvve`, `yukimi`, `evvv_vvve`, `linkedin_username`, `email_client`, `email`, `Yukimi`, `project_description`
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+Discord bot (todo: add more info later)
 
 
 
@@ -81,8 +79,6 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 - [ ] Coming soon(?)
 
 See the [open issues](https://github.com/evvv-vvve/yukimi/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -99,8 +95,6 @@ Don't forget to give the project a star! Thanks again!
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -121,18 +115,12 @@ Twitter: [@evvv_vvve](https://twitter.com/evvv_vvve)
 Email: evvv_vvve@proton.me
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
 * [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
-* []()
-* []()
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+* [serenity-rs](https://github.com/serenity-rs/serenity)
 
 
 
