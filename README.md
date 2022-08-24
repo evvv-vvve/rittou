@@ -78,8 +78,6 @@ Don't forget to give the project a star! Thanks again!
 
 Distributed under the GNU GPL-3.0 license License. See `LICENSE` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTACT -->
