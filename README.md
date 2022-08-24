@@ -38,14 +38,10 @@
   <p align="center">
     project_description
     <br />
-    <a href="https://github.com/evvv-vvve/yukimi"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/evvv-vvve/yukimi/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/evvv-vvve/yukimi">View Demo</a>
-    ·
-    <a href="https://github.com/evvv-vvve/yukimi/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/evvv-vvve/yukimi/issues">Request Feature</a>
+    <a href="https://github.com/evvv-vvve/yukimi/issues">Report Bug or Request Feature</a>
   </p>
 </div>
 
@@ -176,7 +172,8 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@evvv_vvve](https://twitter.com/evvv_vvve) - evvv_vvve@proton.me
+Twitter: [@evvv_vvve](https://twitter.com/evvv_vvve)
+Email: evvv_vvve@proton.me
 
 Project Link: [https://github.com/evvv-vvve/yukimi](https://github.com/evvv-vvve/yukimi)
 
