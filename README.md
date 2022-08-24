@@ -194,14 +194,14 @@ Project Link: [https://github.com/evvv-vvve/yukimi](https://github.com/evvv-vvve
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/evvv_vvve/yukimi.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/evvv-vvve/yukimi.svg?style=for-the-badge
 [contributors-url]: https://github.com/evvv-vvve/yukimi/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/evvv_vvve/yukimi.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/evvv-vvve/yukimi.svg?style=for-the-badge
 [forks-url]: https://github.com/evvv-vvve/yukimi/network/members
-[stars-shield]: https://img.shields.io/github/stars/evvv_vvve/yukimi.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/evvv-vvve/yukimi.svg?style=for-the-badge
 [stars-url]: https://github.com/evvv-vvve/yukimi/stargazers
-[issues-shield]: https://img.shields.io/github/issues/evvv_vvve/yukimi.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/evvv-vvve/yukimi.svg?style=for-the-badge
 [issues-url]: https://github.com/evvv-vvve/yukimi/issues
-[license-shield]: https://img.shields.io/github/license/evvv_vvve/yukimi.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/evvv-vvve/yukimi.svg?style=for-the-badge
 [license-url]: https://github.com/evvv-vvve/yukimi/blob/master/LICENSE.txt
 [product-screenshot]: images/screenshot.png
