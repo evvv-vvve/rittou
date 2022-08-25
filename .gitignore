@@ -1,7 +1,9 @@
 **/.git
 **/Cargo.lock
 **/target
+**/config.toml
 
 .git
 Cargo.lock
 target
+config.toml
