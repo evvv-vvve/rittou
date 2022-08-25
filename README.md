@@ -30,7 +30,7 @@
 <h3 align="center">Yukimi</h3>
 
   <p align="center">
-    A funky lil discord bot
+    A general-purpose Discord bot written in Rust
     <br />
     <a href="https://github.com/evvv-vvve/yukimi/wiki"><strong>Explore the docs »</strong></a>
     <br />
@@ -44,8 +44,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Discord bot (todo: add more info later)
+Yukimi serves as a testbed for me to mess around with Rust and improve with the language, similar to an old project of mine which bears a similar name, [Yuki]
+(https://github.com/evvv-vvve/yuki), which Yukimi is technically a reimagining of.
 
+
+The idea is for Yukimi to be an all-in-one bot, similar to Yuki, compressing often-used commands and features into one with added goodies and tidbits here and there.
 
 
 <!-- ROADMAP -->
