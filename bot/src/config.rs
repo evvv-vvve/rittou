@@ -18,6 +18,9 @@ pub enum ConfigError {
 pub struct Config {
     /// Login token for Discord
     token: String,
+
+    /// Command prefixes
+    prefixes: Vec<String>,
 }
 
 impl Config {
@@ -38,5 +41,8 @@ impl Config {
     }
 
     /// Returns the value of `token`
-    pub fn get_token(&self) -> String { self.token.clone() }
+    pub fn get_token(&self) -> &String { &self.token }
+
+    /// Returns a list of default prefixes
+    pub fn get_prefixes(&self) -> &Vec<String> { &self.prefixes }
 }
