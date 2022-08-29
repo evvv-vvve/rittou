@@ -1,12 +1,14 @@
 use std::str::FromStr;
+use std::time::Duration;
 
 use serenity::builder::{CreateSelectMenuOption, CreateSelectMenu, CreateActionRow, CreateButton};
 use serenity::client::Context;
+use serenity::futures::StreamExt;
 use serenity::model::channel::Message;
 use serenity::framework::standard::macros::{command, group};
-use serenity::framework::standard::{StandardFramework, CommandResult};
-use serenity::model::interactions::message_component::SelectMenu;
+use serenity::framework::standard::{CommandResult};
 use serenity::model::prelude::component::ButtonStyle;
+use serenity::model::prelude::interaction::InteractionResponseType;
 
 #[derive(thiserror::Error, Debug)]
 pub enum CommandError {
@@ -158,12 +160,81 @@ impl FromStr for Sound {
 }
 
 #[group]
-#[commands(ping)]
+#[commands(ping, animal)]
 struct General;
 
 #[command]
 async fn ping(ctx: &Context, msg: &Message) -> CommandResult {
-    msg.reply(ctx, "Pong!").await?;
+    let start = std::time::Instant::now();
+    let mut pong_msg = msg.reply(ctx, "Waiting...").await?;
+    let elapsed = start.elapsed();
+
+    pong_msg.edit(&ctx, |msg| {
+        msg.content(format!("Pong! Took {}ms to respond", elapsed.as_millis()))
+    }).await?;
+
+    Ok(())
+}
+
+#[command]
+async fn animal(ctx: &Context, msg: &Message) -> CommandResult {
+    // ask user fav animal
+    let m = msg.channel_id
+       .send_message(&ctx, |m| {
+        m.content("Select your fav animal")
+         .components(|c| c.add_action_row(Animal::action_row()))
+       })
+       .await
+       .unwrap();
+    
+       // wait for user to select smth
+       let mci =
+       match m.await_component_interaction(&ctx).timeout(Duration::from_secs(60 * 3)).await {
+           Some(ci) => ci,
+           None => {
+               m.reply(&ctx, "Timed out").await.unwrap();
+               return Ok(());
+           },
+       };
+
+       // data.custom_id contains the id of the component (here "animal_select")
+        // and should be used to identify if a message has multiple components.
+        // data.values contains the selected values from the menu
+        let animal = Animal::from_str(mci.data.values.get(0).unwrap()).unwrap();
+
+        // Acknowledge the interaction and edit the message
+        mci.create_interaction_response(&ctx, |r| {
+            r.kind(InteractionResponseType::UpdateMessage).interaction_response_data(|d| {
+                d.content(format!("You chose: **{}**\nNow choose a sound!", animal))
+                    .components(|c| c.add_action_row(Sound::action_row()))
+            })
+        })
+        .await
+        .unwrap();
+
+        // Wait for multiple interactions
+
+        let mut cib =
+            m.await_component_interactions(&ctx).timeout(Duration::from_secs(60 * 3)).build();
+
+        while let Some(mci) = cib.next().await {
+            let sound = Sound::from_str(&mci.data.custom_id).unwrap();
+            // Acknowledge the interaction and send a reply
+            mci.create_interaction_response(&ctx, |r| {
+                // This time we dont edit the message but reply to it
+                r.kind(InteractionResponseType::ChannelMessageWithSource).interaction_response_data(
+                    |d| {
+                        // Make the message hidden for other users by setting `ephemeral(true)`.
+                        d.ephemeral(true).content(format!("The **{}** says __{}__", animal, sound))
+                    },
+                )
+            })
+            .await
+            .unwrap();
+        }
+
+        // Delete the orig message or there will be dangling components
+        m.delete(&ctx).await.unwrap();
 
     Ok(())
 }
