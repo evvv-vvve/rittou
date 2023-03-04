@@ -1,6 +1,7 @@
 [workspace]
 members = [
-    "bot"
+    "bot",
+    "commands",
 ]
 
 # Enable max optimizations for dependencies, but not for our code:

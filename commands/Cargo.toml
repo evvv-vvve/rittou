@@ -1,16 +1,17 @@
 [package]
-name = "yukimi"
+name = "commands"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-commands = { path = "../commands" }
 toml = "0.7"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 serde = "1"
+serde_json = "1"
 thiserror = "1"
+reqwest = "0.11"
 
 [dependencies.serenity]
 version = "0.11"
