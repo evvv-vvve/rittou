@@ -105,9 +105,9 @@ Discord:
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/evvv-vvve/rittou.svg?style=for-the-badge
 [contributors-url]: https://github.com/evvv-vvve/rittou/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/evvv-vvve/rittou.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/evvv-vvve/rittou?style=for-the-badge
 [forks-url]: https://github.com/evvv-vvve/rittou/network/members
-[stars-shield]: https://img.shields.io/github/stars/evvv-vvve/rittou.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/evvv-vvve/rittou?style=for-the-badge
 [stars-url]: https://github.com/evvv-vvve/rittou/stargazers
 [issues-shield]: https://img.shields.io/github/issues/evvv-vvve/rittou.svg?style=for-the-badge
 [issues-url]: https://github.com/evvv-vvve/rittou/issues
