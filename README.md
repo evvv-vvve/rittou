@@ -78,7 +78,7 @@ Don't forget to give the project a star! Thanks again!
 <!-- LICENSE -->
 ## License
 
-Distributed under the GNU GPL-3.0 license License. See `LICENSE` for more information.
+Distributed under the GNU GPL-3.0 License. See `LICENSE` for more information.
 
 
 
@@ -88,6 +88,8 @@ Distributed under the GNU GPL-3.0 license License. See `LICENSE` for more inform
 Twitter: [@evvv_vvve](https://twitter.com/evvv_vvve)
 
 Email: evvv_vvve@proton.me
+
+Discord: 
 
 
 
@@ -109,5 +111,5 @@ Email: evvv_vvve@proton.me
 [stars-url]: https://github.com/evvv-vvve/rittou/stargazers
 [issues-shield]: https://img.shields.io/github/issues/evvv-vvve/rittou.svg?style=for-the-badge
 [issues-url]: https://github.com/evvv-vvve/rittou/issues
-[license-shield]: https://img.shields.io/github/license/evvv-vvve/rittou.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/evvv-vvve/rittou?style=for-the-badge
 [license-url]: https://github.com/evvv-vvve/rittou/blob/main/LICENSE
