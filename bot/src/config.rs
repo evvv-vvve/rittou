@@ -1,3 +1,5 @@
+use lazy_static::lazy_static;
+
 /// Errors that can occur with a config file
 #[derive(thiserror::Error, Debug)]
 pub enum ConfigError {
@@ -14,13 +16,18 @@ pub enum ConfigError {
 
 /// A collection of configuration values
 /// for Yukimi
-#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Default, serde::Serialize, serde::Deserialize)]
 pub struct Config {
     /// Login token for Discord
     token: String,
 
     /// Command prefixes
     prefixes: Vec<String>,
+
+    #[serde(default)]
+    dev_guild_id: Option<u64>,
+
+    message_encryption_key: String,
 }
 
 impl Config {
@@ -45,4 +52,15 @@ impl Config {
 
     /// Returns a list of default prefixes
     pub fn get_prefixes(&self) -> &Vec<String> { &self.prefixes }
+
+    // Returns the Optional dev guild id
+    pub fn get_dev_guild_id(&self) -> &Option<u64> {
+        &self.dev_guild_id
+    }
+
+    pub fn get_message_enryption_key(&self) -> &String { &self.message_encryption_key }
+}
+
+lazy_static! {
+    pub static ref CONFIG: Result<Config, ConfigError> = Config::from_file("config.toml");
 }

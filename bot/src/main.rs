@@ -2,7 +2,7 @@ use discord_event_handler::DiscordEventHandler;
 use serenity::framework::StandardFramework;
 use serenity::prelude::*;
 
-use config::Config;
+use config::{Config, CONFIG};
 use commands::{
     utility::*,
     fun::*
@@ -14,7 +14,7 @@ pub mod discord_event_handler;
 
 #[tokio::main]
 async fn main() {
-    match Config::from_file("config.toml") {
+    match &*CONFIG {
         Ok(config) => {
             let framework = StandardFramework::new()
                 .configure(|conf| conf.prefixes(config.get_prefixes()))

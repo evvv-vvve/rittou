@@ -2,7 +2,10 @@ use serenity::async_trait;
 use serenity::model::application::command::Command;
 use serenity::model::application::interaction::{Interaction, InteractionResponseType};
 use serenity::model::gateway::Ready;
+use serenity::model::prelude::GuildId;
 use serenity::prelude::*;
+
+use crate::config::{ConfigError, Config, self};
 
 pub struct DiscordEventHandler;
 
@@ -30,22 +33,43 @@ impl EventHandler for DiscordEventHandler {
     }
 
     async fn ready(&self, ctx: Context, ready: Ready) {
-        println!("{} is connected!", ready.user.name);
+        if let Ok(config) = &*config::CONFIG {
+            if let Some(id) = config.get_dev_guild_id() {
+                let guild_id = GuildId(*id);
 
-        /*let guild_id = GuildId(/* guild id here */);
+                let _ = GuildId::set_application_commands(
+                    &guild_id,
+                    &ctx.http,
+                    |commands| {
+                        commands.create_application_command(|command| commands::slash_cat::register(command));
+                        commands.create_application_command(|command| commands::slash_dog::register(command))
+                    }
+                )
+                .await;
+            } else {
+                println!("dev guild id missing or invalid, skipping command registration");
+            }
+        } else {
+            println!("Config file missing or invalid, skipping command registration");
+        }
 
-        let commands = GuildId::set_application_commands(&guild_id, &ctx.http, |commands| {
-            commands
-                .create_application_command(|command| commands::pingapp::register(command))
-        })
-        .await;
-
-        println!("I now have the following guild slash commands: {:#?}", commands);*/
-
-        let _guild_command = Command::create_global_application_command(&ctx.http, |command| {
+        /*let _guild_command = Command::create_global_application_command(&ctx.http, |command| {
             commands::slash_cat::register(command);
             commands::slash_dog::register(command)
         })
-        .await;
+        .await;*/
+        
+        /*if let Ok(cmds) = ctx.http.get_global_application_commands().await {
+            for cmd in cmds {
+                if let Ok(_) = Command::delete_global_application_command(&ctx.http, cmd.id).await {
+                    println!("Removed global slash command w/id {}", cmd.id);
+                } else {
+                    println!("Could not remove global slash command w/id {}", cmd.id);
+                }
+            }
+        }*/
+
+    
+        println!("{}: connected", ready.user.name);
     }
 }

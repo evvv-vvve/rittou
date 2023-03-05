@@ -1,5 +1,5 @@
 [package]
-name = "yukimi"
+name = "rittou"
 version = "0.1.0"
 edition = "2021"
 
@@ -11,6 +11,7 @@ toml = "0.7"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 serde = "1"
 thiserror = "1"
+lazy_static = "1"
 
 [dependencies.serenity]
 version = "0.11"
