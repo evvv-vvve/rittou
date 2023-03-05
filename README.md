@@ -27,15 +27,15 @@
 
 
 <!-- project info mumbo jumbo -->
-<h3 align="center">Yukimi</h3>
+<h3 align="center">Rittou</h3>
 
   <p align="center">
     A general-purpose Discord bot written in Rust
     <br />
-    <a href="https://github.com/evvv-vvve/yukimi/wiki"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/evvv-vvve/rittou/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/evvv-vvve/yukimi/issues">Report Bug or Request Feature</a>
+    <a href="https://github.com/evvv-vvve/rittou/issues">Report Bug or Request Feature</a>
   </p>
 </div>
 
@@ -44,11 +44,10 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Yukimi serves as a testbed for me to mess around with Rust and improve with the language, similar to an old project of mine which bears a similar name, [Yuki]
-(https://github.com/evvv-vvve/yuki), which Yukimi is technically a reimagining of.
+Rittou serves as a testbed for me to mess around with Rust and improve with the language, similar to an old discord bot of mine, [Yuki](https://github.com/evvv-vvve/yuki), which Rittou is technically a reimagining of.
 
 
-The idea is for Yukimi to be an all-in-one bot, similar to Yuki, compressing often-used commands and features into one with added goodies and tidbits here and there.
+The idea is for Rittou to be an all-in-one bot, similar to Yuki, compressing often-used commands and features into one with added goodies and tidbits here and there.
 
 
 <!-- ROADMAP -->
@@ -56,7 +55,7 @@ The idea is for Yukimi to be an all-in-one bot, similar to Yuki, compressing oft
 
 - [ ] Coming soon(?)
 
-See the [open issues](https://github.com/evvv-vvve/yukimi/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/evvv-vvve/rittou/issues) for a full list of proposed features (and known issues).
 
 
 
@@ -79,7 +78,7 @@ Don't forget to give the project a star! Thanks again!
 <!-- LICENSE -->
 ## License
 
-Distributed under the GNU GPL-3.0 license License. See `LICENSE` for more information.
+Distributed under the GNU GPL-3.0 License. See `LICENSE` for more information.
 
 
 
@@ -89,6 +88,8 @@ Distributed under the GNU GPL-3.0 license License. See `LICENSE` for more inform
 Twitter: [@evvv_vvve](https://twitter.com/evvv_vvve)
 
 Email: evvv_vvve@proton.me
+
+Discord: 
 
 
 
@@ -102,13 +103,13 @@ Email: evvv_vvve@proton.me
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/evvv-vvve/yukimi.svg?style=for-the-badge
-[contributors-url]: https://github.com/evvv-vvve/yukimi/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/evvv-vvve/yukimi.svg?style=for-the-badge
-[forks-url]: https://github.com/evvv-vvve/yukimi/network/members
-[stars-shield]: https://img.shields.io/github/stars/evvv-vvve/yukimi.svg?style=for-the-badge
-[stars-url]: https://github.com/evvv-vvve/yukimi/stargazers
-[issues-shield]: https://img.shields.io/github/issues/evvv-vvve/yukimi.svg?style=for-the-badge
-[issues-url]: https://github.com/evvv-vvve/yukimi/issues
-[license-shield]: https://img.shields.io/github/license/evvv-vvve/yukimi.svg?style=for-the-badge
-[license-url]: https://github.com/evvv-vvve/yukimi/blob/main/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/evvv-vvve/rittou.svg?style=for-the-badge
+[contributors-url]: https://github.com/evvv-vvve/rittou/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/evvv-vvve/rittou?style=for-the-badge
+[forks-url]: https://github.com/evvv-vvve/rittou/network/members
+[stars-shield]: https://img.shields.io/github/stars/evvv-vvve/rittou?style=for-the-badge
+[stars-url]: https://github.com/evvv-vvve/rittou/stargazers
+[issues-shield]: https://img.shields.io/github/issues/evvv-vvve/rittou.svg?style=for-the-badge
+[issues-url]: https://github.com/evvv-vvve/rittou/issues
+[license-shield]: https://img.shields.io/github/license/evvv-vvve/rittou?style=for-the-badge
+[license-url]: https://github.com/evvv-vvve/rittou/blob/main/LICENSE
