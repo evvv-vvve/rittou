@@ -27,7 +27,7 @@ pub struct Config {
     #[serde(default)]
     dev_guild_id: Option<u64>,
 
-    message_encryption_key: String,
+    encryption_key: String,
 }
 
 impl Config {
@@ -58,7 +58,7 @@ impl Config {
         &self.dev_guild_id
     }
 
-    pub fn get_message_enryption_key(&self) -> &String { &self.message_encryption_key }
+    pub fn get_enryption_key(&self) -> &String { &self.encryption_key }
 }
 
 lazy_static! {

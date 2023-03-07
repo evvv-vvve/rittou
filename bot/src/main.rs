@@ -1,3 +1,4 @@
+use data::user_message_cache::{UserMessageCache, MessageCacheData};
 use discord_event_handler::DiscordEventHandler;
 use serenity::framework::StandardFramework;
 use serenity::prelude::*;
@@ -11,6 +12,7 @@ use commands::{
 
 pub mod config;
 pub mod discord_event_handler;
+pub mod data;
 
 #[tokio::main]
 async fn main() {
@@ -32,6 +34,8 @@ async fn main() {
                 .await
                 .expect("Couldn't create client!");
             
+            client.cache_and_http.cache.set_max_messages(256);
+
             if let Err(err) = client.start().await {
                 println!("Error while running client: {err:?}")
             }

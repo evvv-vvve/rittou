@@ -2,12 +2,19 @@ use serenity::async_trait;
 use serenity::model::application::command::Command;
 use serenity::model::application::interaction::{Interaction, InteractionResponseType};
 use serenity::model::gateway::Ready;
-use serenity::model::prelude::GuildId;
+use serenity::model::prelude::{GuildId, Message, MessageUpdateEvent};
 use serenity::prelude::*;
 
+use lazy_static::lazy_static;
+
 use crate::config::{ConfigError, Config, self};
+use crate::data::user_message_cache::UserMessageCache;
 
 pub struct DiscordEventHandler;
+
+lazy_static! {
+    pub static ref USR_MSG_CACHE: RwLock<UserMessageCache> = RwLock::new(UserMessageCache::new());
+}
 
 #[async_trait]
 impl EventHandler for DiscordEventHandler {
@@ -29,6 +36,26 @@ impl EventHandler for DiscordEventHandler {
             {
                 println!("Cannot respond to slash command: {}", why);
             }
+        }
+    }
+
+    async fn message(&self, ctx: Context, msg: Message) {
+        USR_MSG_CACHE.write().await.add_or_update_msg(&msg);
+    }
+
+    async fn message_update(
+        &self,
+        ctx: Context,
+        old_if_available: Option<Message>,
+        new: Option<Message>,
+        event: MessageUpdateEvent,
+    ) {
+        println!("MSG UPDATE");
+        if let Some(msg) = new {
+            
+            USR_MSG_CACHE.write().await.add_or_update_msg(&msg);
+        } else {
+            println!("not available");
         }
     }
 

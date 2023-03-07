@@ -19,7 +19,7 @@ pub struct Fun;
 /// Convert message text into emojis
 async fn emojify(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
     let text = args.rest().to_string();
-
+    
     msg.reply(&ctx, convert_text_to_emojis(text)).await?;
 
     Ok(())
