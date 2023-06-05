@@ -1,4 +1,6 @@
-use lazy_static::lazy_static;
+use std::sync::Arc;
+
+use serenity::prelude::TypeMapKey;
 
 /// Errors that can occur with a config file
 #[derive(thiserror::Error, Debug)]
@@ -30,6 +32,12 @@ pub struct Config {
     encryption_key: String,
 }
 
+pub struct ConfigData;
+
+impl TypeMapKey for ConfigData {
+    type Value = Arc<Config>;
+}
+
 impl Config {
     /// Attempts to read a file into a string, then parse it
     /// using toml.
@@ -59,8 +67,4 @@ impl Config {
     }
 
     pub fn get_enryption_key(&self) -> &String { &self.encryption_key }
-}
-
-lazy_static! {
-    pub static ref CONFIG: Result<Config, ConfigError> = Config::from_file("config.toml");
 }
