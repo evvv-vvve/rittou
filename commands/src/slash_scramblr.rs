@@ -1,3 +1,5 @@
+use bot_data::scramblr::{ScramblrError, get_scrambled_message};
+use bot_data::user_message_cache::{UserMessageData, UserMessageCache};
 use serenity::builder::CreateApplicationCommand;
 use serenity::model::prelude::command::CommandOptionType;
 use serenity::model::prelude::interaction::application_command::{CommandDataOption, CommandDataOptionValue};
@@ -8,16 +10,16 @@ pub fn register(command: &mut CreateApplicationCommand) -> &mut CreateApplicatio
     command
         .name("scramblr")
         .description("Scramble up your messages and make a new one!")
-        .create_option(|option|
+        .create_option(|option| {
             option
-                .name("User")
+                .name("user")
                 .description("The user to scramble your messages with")
                 .kind(CommandOptionType::User)
                 .required(false)
-        )
+        })
 }
 
-pub async fn run(msg_author: &User, options: &[CommandDataOption]) -> String {
+pub async fn run(msg_author: &User, user_message_cache: &UserMessageCache, options: &[CommandDataOption]) -> String {
     // get user-provided user, or default to message author
     let provided_user = match options.get(0) {
         Some(cmd_option) => {
@@ -34,27 +36,37 @@ pub async fn run(msg_author: &User, options: &[CommandDataOption]) -> String {
         None => msg_author.clone()
     };
 
-    match mash_messages(&msg_author, &provided_user) {
+    match message_masher(&msg_author, &provided_user, user_message_cache) {
         Ok(content) => content,
         Err(scramblr_error) => format!("{:?}", scramblr_error)
     }
 }
 
-pub fn mash_messages(first_user: &User, second_user: &User) -> Result<String, ScramblrError> {
+pub fn message_masher(
+    first_user: &User,
+    second_user: &User,
+    user_message_cache: &UserMessageCache
+) -> Result<String, ScramblrError> {
     if first_user.bot || second_user.bot {
         return Err(ScramblrError::IsBot);
     }
 
-    Ok("pee".to_string())
-}
+    /*let user_a_count = if let Some(msgs) = user_message_cache.get_user_messages(first_user.id.0) {
+        msgs.len()
+    } else {
+        0
+    };
 
+    let user_b_count = if let Some(msgs) = user_message_cache.get_user_messages(second_user.id.0) {
+        msgs.len()
+    } else {
+        0
+    };
 
-#[derive(thiserror::Error, Debug)]
-pub enum ScramblrError {
-    #[error("One or more users is a bot")]
-    IsBot,
-    #[error("User {0} has too few messages")]
-    TooFewMessages(User),
-    #[error("No message matches were found")]
-    NoMatches
+    Ok(format!("{} ({} messages cached) and {} ({} messages cached)", 
+        first_user.name, user_a_count,
+        second_user.name, user_b_count
+    ))*/
+
+    get_scrambled_message(first_user, second_user, user_message_cache)
 }

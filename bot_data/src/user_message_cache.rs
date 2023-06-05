@@ -11,6 +11,7 @@ pub struct CachedMessage {
     pub content: String,
 }
 
+#[derive(Clone)]
 pub struct MessageCacheData {
     pub version: u16,
 
@@ -27,6 +28,7 @@ impl MessageCacheData {
     }
 }
 
+#[derive(Clone)]
 pub struct UserMessageCache {
     pub max_msgs: usize,
     pub messages: MessageCacheData
@@ -41,7 +43,7 @@ impl TypeMapKey for UserMessageData {
 impl UserMessageCache {
     pub fn new() -> Self {
         Self {
-            max_msgs: 5,
+            max_msgs: 200,
             messages: MessageCacheData::new()
         }
     }
@@ -54,7 +56,6 @@ impl UserMessageCache {
         }
 
         // check if msg has a command prefix
-
         if let Some(mut indexes) = string_has_url(&msg_content) {
             indexes.sort();
             indexes.reverse();
@@ -122,13 +123,11 @@ impl UserMessageCache {
     }
 
     pub fn get_user_messages(&self, user_id: u64) -> Option<Vec<&CachedMessage>> {
-        if self.messages.data.contains_key(&user_id) {
+        if let Some(msgs) = self.messages.data.get(&user_id) {
             let mut user_messages = Vec::new();
 
-            for messages_map in self.messages.data.values() {
-                for messages in messages_map.values() {
-                    user_messages.extend(messages.iter());
-                }
+            for (_channel_id, messages) in msgs {
+                user_messages.extend(messages.iter());
             }
 
             Some(user_messages)

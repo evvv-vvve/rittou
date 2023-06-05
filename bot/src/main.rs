@@ -1,6 +1,5 @@
-use std::{sync::{Arc, mpsc::channel}, thread};
+use std::sync::Arc;
 
-use data::user_message_cache::{UserMessageCache, UserMessageData};
 use discord_event_handler::DiscordEventHandler;
 use serenity::{framework::StandardFramework, client::bridge::gateway::ShardManager};
 use serenity::prelude::*;
@@ -10,12 +9,11 @@ use commands::{
     utility::*,
     fun::*
 };
-use tokio::runtime::Runtime;
 
+use bot_data::user_message_cache::{UserMessageCache, UserMessageData};
 
 pub mod config;
 pub mod discord_event_handler;
-pub mod data;
 
 pub struct ShardManagerContainer;
 
