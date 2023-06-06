@@ -1,7 +1,7 @@
 use rand::{seq::SliceRandom, thread_rng, Rng};
 use serenity::model::user::User;
 
-use crate::user_message_cache::{UserMessageCache, CachedMessage};
+use crate::user_message_cache::UserMessageCache;
 
 #[derive(thiserror::Error, Debug)]
 pub enum ScramblrError {
@@ -118,8 +118,8 @@ fn make_scrambled_message(
     let split_a = split_at_word_index(msg_a, *indexes_a.choose(&mut rng).unwrap());
     let split_b = split_at_word_index(msg_b, *indexes_b.choose(&mut rng).unwrap());
 
-    let mut first_part = "";
-    let mut second_part = "";
+    let first_part;
+    let second_part;
 
     // decide the order to mash messages
     if rng.gen() {
