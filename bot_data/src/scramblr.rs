@@ -7,8 +7,8 @@ use crate::user_message_cache::UserMessageCache;
 pub enum ScramblrError {
     #[error("One or more users is a bot")]
     IsBot,
-    #[error("User {0} has too few messages. Minimum cached message count is `3`")]
-    TooFewMessages(User),
+    #[error("{0} has too few messages. Minimum cached message count is `3`")]
+    TooFewMessages(String),
     #[error("No message matches were found")]
     NoMatches
 }
@@ -22,15 +22,15 @@ pub fn get_scrambled_message(
         return Err(ScramblrError::IsBot);
     }
 
-    let user_a_messages = user_message_cache.get_user_messages(user_a.id.0).unwrap_or(Vec::new());
-    let user_b_messages = user_message_cache.get_user_messages(user_b.id.0).unwrap_or(Vec::new());
+    let user_a_messages = user_message_cache.get_user_messages(user_a.id.get()).unwrap_or(Vec::new());
+    let user_b_messages = user_message_cache.get_user_messages(user_b.id.get()).unwrap_or(Vec::new());
 
     if user_a_messages.len() <= 3 {
-        return Err(ScramblrError::TooFewMessages(user_a.clone()))
+        return Err(ScramblrError::TooFewMessages(user_a.tag()))
     }
 
     if user_b_messages.len() <= 3 {
-        return Err(ScramblrError::TooFewMessages(user_b.clone()))
+        return Err(ScramblrError::TooFewMessages(user_b.tag()))
     }
 
     let mut scramble_tries = 0;
@@ -108,8 +108,6 @@ fn make_scrambled_message(
     msg_b: &str,
     matched_word: &str
 ) -> String {
-    println!("{}", matched_word);
-
     let indexes_a = get_word_indexes(msg_a, matched_word);
     let indexes_b = get_word_indexes(msg_b, matched_word);
 

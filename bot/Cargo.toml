@@ -17,7 +17,9 @@ aes-gcm = "0.10"
 url = "2"
 
 [dependencies.serenity]
-version = "0.11"
+#version = "0.11"
+git = "https://github.com/serenity-rs/serenity.git"
+branch = "next"
 default-features = false
 features = [
     "builder",

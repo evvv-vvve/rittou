@@ -15,7 +15,9 @@ thiserror = "1"
 reqwest = "0.11"
 
 [dependencies.serenity]
-version = "0.11"
+#version = "0.11"
+git = "https://github.com/serenity-rs/serenity.git"
+branch = "next"
 default-features = false
 features = [
     "builder",

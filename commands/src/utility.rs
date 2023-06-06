@@ -7,7 +7,7 @@ use serenity::{
             group
         }
     },
-    model::channel::Message
+    model::channel::Message, builder::EditMessage
 };
 
 #[group]
@@ -21,9 +21,9 @@ pub async fn ping(ctx: &Context, msg: &Message) -> CommandResult {
     let mut pong_msg = msg.reply(ctx, "Waiting...").await?;
     let elapsed = start.elapsed();
 
-    pong_msg.edit(&ctx, |msg| {
-        msg.content(format!("Pong! Took {}ms to respond", elapsed.as_millis()))
-    }).await?;
+    let msg_content = format!("Pong! Took {}ms to respond", elapsed.as_millis());
+    
+    pong_msg.edit(&ctx, EditMessage::new().content(msg_content)).await?;
 
     Ok(())
 }

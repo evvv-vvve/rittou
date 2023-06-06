@@ -1,5 +1,6 @@
+use serenity::all::Interaction;
 use serenity::async_trait;
-use serenity::model::application::interaction::{Interaction, InteractionResponseType};
+use serenity::builder::{CreateInteractionResponseMessage, CreateInteractionResponse};
 use serenity::model::gateway::Ready;
 use serenity::model::prelude::{GuildId, Message, MessageUpdateEvent};
 use serenity::prelude::*;
@@ -13,10 +14,10 @@ pub struct DiscordEventHandler;
 #[async_trait]
 impl EventHandler for DiscordEventHandler {
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
-        if let Interaction::ApplicationCommand(command) = interaction {
+        if let Interaction::Command(command) = interaction {
             let response = match command.data.name.as_str() {
-                "cat" => Some(commands::slash_cat::run(&command.data.options).await),
-                "dog" => Some(commands::slash_dog::run(&command.data.options).await),
+                "cat" => Some(commands::slash_cat::run(&command.data.options()).await),
+                "dog" => Some(commands::slash_dog::run(&command.data.options()).await),
                 "scramblr" => {
                     // get user message cache
                     let user_message_cache = {
@@ -25,18 +26,16 @@ impl EventHandler for DiscordEventHandler {
                         data_read.get::<UserMessageData>().expect("Expected UserMessageData").clone()
                     }.read().await.clone();
 
-                    Some(commands::slash_scramblr::run(&command.user, &user_message_cache, &command.data.options).await)
+                    Some(commands::slash_scramblr::run(&command.user, &user_message_cache, &command.data.options()).await)
                 },
                 _ => None,
             };
 
             if let Some(content) = response {
-                let interaction_response = command.create_interaction_response(&ctx.http, |response| {
-                    response.kind(InteractionResponseType::ChannelMessageWithSource)
-                            .interaction_response_data(|message| message.content(content))
-                }).await;
+                let data = CreateInteractionResponseMessage::new().content(content);
+                let builder = CreateInteractionResponse::Message(data);
 
-                if let Err(response_error) = interaction_response {
+                if let Err(response_error) = command.create_response(&ctx.http, builder).await {
                     println!("Cannot respond to slash command: {}", response_error);
                 }
             }
@@ -75,34 +74,19 @@ impl EventHandler for DiscordEventHandler {
         };
 
         if let Some(id) = bot_config.get_dev_guild_id() {
-            let guild_id = GuildId(*id);
+            let guild_id = GuildId::new(*id);
 
-            /*if let Ok(cmds) = ctx.http.get_guild_application_commands(*id).await {
-                for cmd in cmds {
-                    if let Ok(_) = guild_id.delete_application_command(&ctx.http, cmd.id).await {
-                        println!("Removed global slash command w/id {}", cmd.id);
-                    } else {
-                        println!("Could not remove global slash command w/id {}", cmd.id);
-                    }
-                }
-            }*/
-
-            let _ = GuildId::set_application_commands(
-                &guild_id,
+            let commands = guild_id.set_commands(
                 &ctx.http,
-                |commands| {
-                    commands.create_application_command(|command| commands::slash_cat::register(command));
-                    commands.create_application_command(|command| commands::slash_dog::register(command));
-                    commands.create_application_command(|command| commands::slash_scramblr::register(command))
-                }
+                vec![
+                    commands::slash_cat::register(),
+                    commands::slash_dog::register(),
+                    commands::slash_scramblr::register()
+                ]
             )
             .await;
 
-            if let Ok(cmds) = ctx.http.get_guild_application_commands(*id).await {
-                for cmd in cmds {
-                    println!("registered guild command {}", cmd.name);
-                }
-            }
+            println!("registered guild commands: {commands:#?}");
         } else {
             println!("dev guild id missing or invalid, skipping command registration");
         }

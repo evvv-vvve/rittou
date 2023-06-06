@@ -76,19 +76,19 @@ impl UserMessageCache {
         // find and modify an existing message,
         // or add a new one 
         self.messages.data
-            .entry(message.author.id.0)
+            .entry(message.author.id.get())
             .or_insert(HashMap::new())
-            .entry(message.channel_id.0)
+            .entry(message.channel_id.get())
             .and_modify(|messages| {
                 if let Some(msg) = messages.iter_mut().find(|msg|
-                    msg.id == message.id.0
+                    msg.id == message.id.get()
                 ) {
                     msg.content = msg_content.clone();
                     msg.time = message.timestamp.unix_timestamp();
                 } else {
                     messages.push(CachedMessage {
-                        id: message.id.0,
-                        channel_id: message.channel_id.0,
+                        id: message.id.get(),
+                        channel_id: message.channel_id.get(),
                         time: message.timestamp.unix_timestamp(),
                         content: msg_content.clone()
                     })
@@ -96,15 +96,15 @@ impl UserMessageCache {
             })
             .or_insert(vec![
                 CachedMessage {
-                    id: message.id.0,
-                    channel_id: message.channel_id.0,
+                    id: message.id.get(),
+                    channel_id: message.channel_id.get(),
                     time: message.timestamp.unix_timestamp(),
                     content: msg_content.clone()
                 }
             ]);
         
 
-        if let Some(mut user_messages) = self.get_user_messages_mut(message.author.id.0) {
+        if let Some(mut user_messages) = self.get_user_messages_mut(message.author.id.get()) {
             user_messages.sort_by(|msg_a, msg_b| msg_a.time.cmp(&msg_b.time));
 
             if user_messages.len() > self.max_msgs {
@@ -112,9 +112,9 @@ impl UserMessageCache {
 
                 for index in 0..amt_msgs_to_remove {
                     self.messages.data
-                        .get_mut(&message.author.id.0)
+                        .get_mut(&message.author.id.get())
                         .unwrap()
-                        .get_mut(&message.channel_id.0)
+                        .get_mut(&message.channel_id.get())
                         .unwrap()
                         .remove(index);
                 }
@@ -153,7 +153,7 @@ impl UserMessageCache {
     }
 
     pub fn remove_message(&mut self, message: &Message) {
-        self.remove_message_by_id(message.author.id.0, message.channel_id.0, message.id.0);
+        self.remove_message_by_id(message.author.id.get(), message.channel_id.get(), message.id.get());
     }
 
     pub fn remove_message_by_id(&mut self, user_id: u64, channel_id: u64, message_id: u64) {

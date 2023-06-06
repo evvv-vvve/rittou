@@ -1,8 +1,6 @@
+use serenity::{builder::CreateCommand, all::ResolvedOption};
+
 use crate::fetch_error::FetchError;
-
-use serenity::builder::CreateApplicationCommand;
-use serenity::model::prelude::interaction::application_command::CommandDataOption;
-
 
 #[derive(Clone, serde::Serialize, serde::Deserialize)]
 pub struct DogObject {
@@ -11,11 +9,12 @@ pub struct DogObject {
 }
 
 
-pub fn register(command: &mut CreateApplicationCommand) -> &mut CreateApplicationCommand {
-    command.name("dog").description("Retrieve a random picture of a dog")
+pub fn register() -> CreateCommand {
+    CreateCommand::new("dog")
+        .description("Retrieve a random picture of a dog")
 }
 
-pub async fn run(_options: &[CommandDataOption]) -> String {
+pub async fn run(_options: &[ResolvedOption<'_>]) -> String {
     match get_dog().await {
         Ok(dog) => dog.message,
         Err(e) => e.to_string()

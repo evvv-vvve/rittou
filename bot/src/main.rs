@@ -1,8 +1,7 @@
-use std::sync::Arc;
+use std::{sync::Arc, collections::HashSet};
 
 use discord_event_handler::DiscordEventHandler;
-use serenity::{framework::StandardFramework, client::bridge::gateway::ShardManager};
-use serenity::prelude::*;
+use serenity::{prelude::*, gateway::ShardManager, framework::StandardFramework, http::Http};
 
 use config::{Config, ConfigData};
 use commands::{
@@ -27,10 +26,37 @@ async fn main() {
 
     match config {
         Ok(config) => {
+            let http = Http::new(config.get_token());
+
+            // fetch owners and id
+            let (owners, bot_id) = match http.get_current_application_info().await {
+                Ok(info) => {
+                    let mut owners = HashSet::new();
+
+                    if let Some(team) = info.team {
+                        owners.insert(team.owner_user_id);
+                    } else if let Some(owner) = &info.owner {
+                        owners.insert(owner.id);
+                    }
+
+                    match http.get_current_user().await {
+                        Ok(bot_id) => (owners, bot_id.id),
+                        Err(bot_id_err) => panic!("Could not access bot id: {:?}", bot_id_err)
+                    }
+                },
+                Err(app_info_err) => panic!("Could not access application info: {:?}", app_info_err)
+            };
+
             let framework = StandardFramework::new()
-                .configure(|conf| conf.prefixes(config.get_prefixes()))
                 .group(&UTILITY_GROUP)
                 .group(&FUN_GROUP);
+
+            framework.configure(|c| {
+                c.with_whitespace(false)
+                 .on_mention(Some(bot_id))
+                 .prefixes(config.get_prefixes())
+                 .owners(owners)
+            });
 
             let intents = GatewayIntents::non_privileged()
                 | GatewayIntents::MESSAGE_CONTENT
@@ -43,7 +69,7 @@ async fn main() {
                 .await
                 .expect("Couldn't create client!");
             
-            client.cache_and_http.cache.set_max_messages(256);
+            client.cache.set_max_messages(256);
 
             // DATA INSERTION
             {
