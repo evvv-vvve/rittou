@@ -3,13 +3,13 @@ use std::{sync::Arc, collections::HashSet};
 use discord_event_handler::DiscordEventHandler;
 use serenity::{prelude::*, gateway::ShardManager, framework::StandardFramework, http::Http};
 
-use bot_data::{config::{Config, ConfigData}, encryption::{encrypt, decrypt}};
+use bot_data::{config::{Config, ConfigData}};
 use commands::{
     utility::*,
     fun::*
 };
 
-use bot_data::user_message_cache::{UserMessageCache, UserMessageData};
+use bot_data::message_id_cache::{MessageIdCache, UserMessageData};
 
 pub mod discord_event_handler;
 
@@ -74,7 +74,7 @@ async fn main() {
             {
                 let mut data = client.data.write().await;
 
-                data.insert::<UserMessageData>(Arc::new(RwLock::new(UserMessageCache::new())));
+                data.insert::<UserMessageData>(Arc::new(RwLock::new(MessageIdCache::new())));
                 data.insert::<ConfigData>(Arc::new(config));
                 data.insert::<ShardManagerContainer>(client.shard_manager.clone());
             }
