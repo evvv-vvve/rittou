@@ -5,7 +5,7 @@ use serenity::model::gateway::Ready;
 use serenity::model::prelude::{GuildId, Message, MessageUpdateEvent};
 use serenity::prelude::*;
 
-use bot_data::message_id_cache::UserMessageData;
+use bot_data::user_message_cache::UserMessageData;
 
 use bot_data::config::ConfigData;
 
@@ -14,7 +14,13 @@ pub struct DiscordEventHandler;
 #[async_trait]
 impl EventHandler for DiscordEventHandler {
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
-       if let Interaction::Command(command) = interaction {
+        let config = {
+            let data_read = ctx.data.read().await;
+
+            data_read.get::<ConfigData>().expect("Expected Config").clone()
+        };
+
+        if let Interaction::Command(command) = interaction {
             let response = match command.data.name.as_str() {
                 "cat" => Some(commands::slash_cat::run(&command.data.options()).await),
                 "dog" => Some(commands::slash_dog::run(&command.data.options()).await),
@@ -26,16 +32,12 @@ impl EventHandler for DiscordEventHandler {
                         data_read.get::<UserMessageData>().expect("Expected UserMessageData").clone()
                     }.read().await.clone();
 
-                    let response = {
-                        commands::slash_scramblr::run(
-                            &command.user,
-                            &user_message_cache,
-                            &command.data.options(),
-                            &ctx
-                        ).await
-                    };                    
-
-                    Some(response)
+                    Some(commands::slash_scramblr::run(
+                        &command.user,
+                        &user_message_cache,
+                        &command.data.options(),
+                        &config
+                    ).await)
                 },
                 _ => None,
             };
@@ -58,10 +60,16 @@ impl EventHandler for DiscordEventHandler {
             data_read.get::<UserMessageData>().expect("Expected UserMessageData").clone()
         };
 
+        let config = {
+            let data_read = ctx.data.read().await;
+
+            data_read.get::<ConfigData>().expect("Expected Config").clone()
+        };
+
         {
             let mut cache = msgs_lock.write().await;
 
-            cache.add_or_update_msg(&msg);
+            cache.add_or_update_msg(&msg, &config);
         }
     }
 
@@ -133,7 +141,13 @@ async fn cache_user_message(ctx: &Context, new_message: &Option<Message>) {
         {
             let mut cache = msgs_lock.write().await;
 
-            cache.add_or_update_msg(&msg);
+            let config = {
+                let data_read = ctx.data.read().await;
+    
+                data_read.get::<ConfigData>().expect("Expected Config").clone()
+            };
+
+            cache.add_or_update_msg(&msg, &config);
         }
     } else {
         println!("not available");

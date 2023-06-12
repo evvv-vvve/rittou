@@ -1,7 +1,7 @@
 use rand::{seq::SliceRandom, thread_rng, Rng};
-use serenity::{model::user::User, prelude::Context, all::{ChannelId, MessageId}};
+use serenity::model::user::User;
 
-use crate::message_id_cache::MessageIdCache;
+use crate::{user_message_cache::UserMessageCache, encryption::decrypt, config::Config};
 
 #[derive(thiserror::Error, Debug)]
 pub enum ScramblrError {
@@ -11,22 +11,22 @@ pub enum ScramblrError {
     TooFewMessages(String),
     #[error("No message matches were found")]
     NoMatches,
-    #[error("Failure while fetching message: {0}")]
-    FetchMessageFailure(String)
+    #[error("Failed to decrypt a message")]
+    DecryptionError
 }
 
-pub async fn get_scrambled_message(
+pub fn get_scrambled_message(
     user_a: &User,
     user_b: &User,
-    message_id_cache: &MessageIdCache,
-    ctx: &Context
+    user_message_cache: &UserMessageCache,
+    config: &Config
 ) -> Result<String, ScramblrError> {
     if user_a.bot || user_b.bot {
         return Err(ScramblrError::IsBot);
     }
 
-    let user_a_messages = message_id_cache.get_user_messages(user_a.id.get()).unwrap_or(Vec::new());
-    let user_b_messages = message_id_cache.get_user_messages(user_b.id.get()).unwrap_or(Vec::new());
+    let user_a_messages = user_message_cache.get_user_messages(user_a.id.get()).unwrap_or(Vec::new());
+    let user_b_messages = user_message_cache.get_user_messages(user_b.id.get()).unwrap_or(Vec::new());
 
     if user_a_messages.len() <= 3 {
         return Err(ScramblrError::TooFewMessages(user_a.tag()))
@@ -37,7 +37,7 @@ pub async fn get_scrambled_message(
     }
 
     let mut scramble_tries = 0;
-    let mut rng = rand::rngs::OsRng;
+    let mut rng = thread_rng();
 
     let mut last_msg = None;
 
@@ -50,24 +50,14 @@ pub async fn get_scrambled_message(
             let msg_a = user_a_msg.unwrap();
             let msg_b = user_b_msg.unwrap();
 
-            let content_a = match ctx.http
-                .get_message(ChannelId::from(msg_a.channel_id), MessageId::from(msg_a.id)).await {
-                    Ok(msg) => {
-                        msg.content
-                    },
-                    Err(e) => {
-                        return Err(ScramblrError::FetchMessageFailure(e.to_string()))
-                    }
+            let content_a = match decrypt((&msg_a.data, &msg_a.nonce), config) {
+                Ok(content) => content,
+                Err(e) => return Err(ScramblrError::DecryptionError)
             };
 
-            let content_b = match ctx.http
-                .get_message(ChannelId::from(msg_b.channel_id), MessageId::from(msg_b.id)).await {
-                    Ok(msg) => {
-                        msg.content
-                    },
-                    Err(e) => {
-                        return Err(ScramblrError::FetchMessageFailure(e.to_string()))
-                    }
+            let content_b = match decrypt((&msg_b.data, &msg_b.nonce), config) {
+                Ok(content) => content,
+                Err(e) => return Err(ScramblrError::DecryptionError)
             };
 
             if msg_a.id == msg_b.id {
