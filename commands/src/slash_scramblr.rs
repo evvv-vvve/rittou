@@ -1,3 +1,4 @@
+use bot_data::config::Config;
 use bot_data::scramblr::get_scrambled_message;
 use bot_data::user_message_cache::UserMessageCache;
 use serenity::all::{CommandOptionType, ResolvedOption, ResolvedValue};
@@ -16,7 +17,7 @@ pub fn register() -> CreateCommand {
     )
 }
 
-pub async fn run(msg_author: &User, user_message_cache: &UserMessageCache, options: &[ResolvedOption<'_>]) -> String {
+pub async fn run(msg_author: &User, user_message_cache: &UserMessageCache, options: &[ResolvedOption<'_>], config: &Config) -> String {
     // get user-provided user, or default to message author
     let provided_user = match options.get(0) {
         Some(ResolvedOption {
@@ -26,7 +27,7 @@ pub async fn run(msg_author: &User, user_message_cache: &UserMessageCache, optio
         _ => msg_author
     };
 
-    match get_scrambled_message(msg_author, &provided_user, user_message_cache) {
+    match get_scrambled_message(msg_author, &provided_user, user_message_cache, config) {
         Ok(content) => content,
         Err(scramblr_error) => format!("{}", scramblr_error.to_string())
     }

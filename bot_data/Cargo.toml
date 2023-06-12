@@ -14,6 +14,9 @@ lazy_static = "1"
 aes-gcm = "0.10"
 url = "2"
 rand = "0.8"
+polodb_core = "4.4"
+aes-gcm-siv = "0.11"
+md5 = "0.7"
 
 [dependencies.serenity]
 #version = "0.11"

@@ -1,22 +1,26 @@
 use std::{collections::HashMap, sync::Arc};
 
+use serde::{Serialize, Deserialize};
 use serenity::{model::prelude::Message, prelude::{TypeMapKey, RwLock}};
 use url::Url;
 
-#[derive(Clone)]
-pub struct CachedMessage {
+use crate::{encryption, config::Config};
+
+#[derive(Clone, Serialize, Deserialize)]
+pub struct CacheMessage {
     pub id: u64,
     pub channel_id: u64,
     pub time: i64,
-    pub content: String,
+    pub data: Vec<u8>,
+    pub nonce: String,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct MessageCacheData {
     pub version: u16,
 
     // <user_id, map<channel_id, Vec<msg>>>
-    pub data: HashMap<u64, HashMap<u64, Vec<CachedMessage>>>
+    pub data: HashMap<u64, HashMap<u64, Vec<CacheMessage>>>
 }
 
 impl MessageCacheData {
@@ -40,6 +44,15 @@ impl TypeMapKey for UserMessageData {
     type Value = Arc<RwLock<UserMessageCache>>;
 }
 
+#[derive(thiserror::Error, Debug)]
+pub enum MessageCacheError {
+    #[error("Faled to load message cache!")]
+    FailedToLoadCache,
+
+    #[error("An error occurred while encrypting/decrypting: {0}")]
+    CryptionError(String),
+}
+
 impl UserMessageCache {
     pub fn new() -> Self {
         Self {
@@ -48,19 +61,29 @@ impl UserMessageCache {
         }
     }
 
-    pub fn add_or_update_msg(&mut self, message: &Message) {
+    pub fn load_cache(&self) -> Result<(), MessageCacheError> {
+        if std::path::Path::new("data/messagecache.toml").exists() {
+            
+        }
+        Ok(())
+    }
+
+    pub fn add_or_update_msg(&mut self, message: &Message, config: &Config) -> Result<(), MessageCacheError> {
         let mut msg_content = message.content.clone();
 
+        // skip cache if the message is a dm or from a bot
         if message.is_private() || message.author.bot {
-            return;
+            return Ok(());
         }
 
         // check if msg has a command prefix
+
+        let mut split_msg = message.content.split(" ").collect::<Vec<&str>>();
+
+        // remove any URLs from the message
         if let Some(mut indexes) = string_has_url(&msg_content) {
             indexes.sort();
             indexes.reverse();
-
-            let mut split_msg = msg_content.split(" ").collect::<Vec<&str>>();
 
             for index in indexes {
                 split_msg.remove(index);
@@ -69,9 +92,23 @@ impl UserMessageCache {
             msg_content = split_msg.join(" ");
         }
 
+        // skip if the message is too short
+        if split_msg.len() < 3 {
+            return Ok(());   
+        }
+
         // check if a channel should be cached
 
         // check if a user has message caching enabled
+
+        let (enc_data, nonce) = match encryption::encrypt(&message.content, config) {
+            Ok(res) => {
+                res
+            },
+            Err(e) => {
+                return Err(MessageCacheError::CryptionError(e.to_string()))
+            }
+        };
 
         // find and modify an existing message,
         // or add a new one 
@@ -83,23 +120,25 @@ impl UserMessageCache {
                 if let Some(msg) = messages.iter_mut().find(|msg|
                     msg.id == message.id.get()
                 ) {
-                    msg.content = msg_content.clone();
+                    msg.data = enc_data.clone();
                     msg.time = message.timestamp.unix_timestamp();
                 } else {
-                    messages.push(CachedMessage {
+                    messages.push(CacheMessage {
                         id: message.id.get(),
                         channel_id: message.channel_id.get(),
                         time: message.timestamp.unix_timestamp(),
-                        content: msg_content.clone()
+                        data: enc_data.clone(),
+                        nonce: nonce.clone()
                     })
                 }
             })
             .or_insert(vec![
-                CachedMessage {
+                CacheMessage {
                     id: message.id.get(),
                     channel_id: message.channel_id.get(),
                     time: message.timestamp.unix_timestamp(),
-                    content: msg_content.clone()
+                    data: enc_data.clone(),
+                    nonce: nonce.clone()
                 }
             ]);
         
@@ -120,9 +159,11 @@ impl UserMessageCache {
                 }
             }
         }
+
+        Ok(())
     }
 
-    pub fn get_user_messages(&self, user_id: u64) -> Option<Vec<&CachedMessage>> {
+    pub fn get_user_messages(&self, user_id: u64) -> Option<Vec<&CacheMessage>> {
         if let Some(msgs) = self.messages.data.get(&user_id) {
             let mut user_messages = Vec::new();
 
@@ -136,7 +177,7 @@ impl UserMessageCache {
         }
     }
 
-    pub fn get_user_messages_mut(&self, user_id: u64) -> Option<Vec<&CachedMessage>> {
+    pub fn get_user_messages_mut(&self, user_id: u64) -> Option<Vec<&CacheMessage>> {
         if self.messages.data.contains_key(&user_id) {
             let mut user_messages = Vec::new();
 

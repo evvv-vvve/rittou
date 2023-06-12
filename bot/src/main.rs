@@ -3,7 +3,7 @@ use std::{sync::Arc, collections::HashSet};
 use discord_event_handler::DiscordEventHandler;
 use serenity::{prelude::*, gateway::ShardManager, framework::StandardFramework, http::Http};
 
-use config::{Config, ConfigData};
+use bot_data::{config::{Config, ConfigData}, encryption::{encrypt, decrypt}};
 use commands::{
     utility::*,
     fun::*
@@ -11,7 +11,6 @@ use commands::{
 
 use bot_data::user_message_cache::{UserMessageCache, UserMessageData};
 
-pub mod config;
 pub mod discord_event_handler;
 
 pub struct ShardManagerContainer;

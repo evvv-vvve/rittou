@@ -1,7 +1,7 @@
 use rand::{seq::SliceRandom, thread_rng, Rng};
 use serenity::model::user::User;
 
-use crate::user_message_cache::UserMessageCache;
+use crate::{user_message_cache::UserMessageCache, encryption::decrypt, config::Config};
 
 #[derive(thiserror::Error, Debug)]
 pub enum ScramblrError {
@@ -10,13 +10,16 @@ pub enum ScramblrError {
     #[error("{0} has too few messages. Minimum cached message count is `3`")]
     TooFewMessages(String),
     #[error("No message matches were found")]
-    NoMatches
+    NoMatches,
+    #[error("Failed to decrypt a message")]
+    DecryptionError
 }
 
 pub fn get_scrambled_message(
     user_a: &User,
     user_b: &User,
-    user_message_cache: &UserMessageCache
+    user_message_cache: &UserMessageCache,
+    config: &Config
 ) -> Result<String, ScramblrError> {
     if user_a.bot || user_b.bot {
         return Err(ScramblrError::IsBot);
@@ -47,14 +50,24 @@ pub fn get_scrambled_message(
             let msg_a = user_a_msg.unwrap();
             let msg_b = user_b_msg.unwrap();
 
+            let content_a = match decrypt((&msg_a.data, &msg_a.nonce), config) {
+                Ok(content) => content,
+                Err(e) => return Err(ScramblrError::DecryptionError)
+            };
+
+            let content_b = match decrypt((&msg_b.data, &msg_b.nonce), config) {
+                Ok(content) => content,
+                Err(e) => return Err(ScramblrError::DecryptionError)
+            };
+
             if msg_a.id == msg_b.id {
                 // skip iteration if message IDs match
                 continue;
             }
 
             // split the messages
-            let lower_a = msg_a.content.to_lowercase();
-            let lower_b = msg_b.content.to_lowercase();
+            let lower_a = content_a.to_lowercase();
+            let lower_b = content_b.to_lowercase();
 
             let msg_a_split = lower_a.split(" ").collect::<Vec<&str>>();
             let msg_b_split = lower_b.split(" ").collect::<Vec<&str>>();
@@ -81,8 +94,8 @@ pub fn get_scrambled_message(
                 }
 
                 // make sure message isnt just a repeat of either users msgs
-                if scrambled_msg.to_lowercase() == msg_a.content.to_lowercase() ||
-                   scrambled_msg.to_lowercase() == msg_b.content.to_lowercase() {
+                if scrambled_msg.to_lowercase() == lower_a.to_lowercase() ||
+                   scrambled_msg.to_lowercase() == lower_b.to_lowercase() {
                     scramble_tries += 1;
                     
                     last_msg = Some(scrambled_msg);

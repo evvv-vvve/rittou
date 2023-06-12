@@ -29,7 +29,7 @@ pub struct Config {
     #[serde(default)]
     dev_guild_id: Option<u64>,
 
-    encryption_key: String,
+    secret_key: String,
 }
 
 pub struct ConfigData;
@@ -66,5 +66,5 @@ impl Config {
         &self.dev_guild_id
     }
 
-    pub fn get_enryption_key(&self) -> &String { &self.encryption_key }
+    pub fn get_secret_key(&self) -> &String { &self.secret_key }
 }
