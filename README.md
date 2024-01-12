@@ -85,9 +85,9 @@ Distributed under the GNU GPL-3.0 License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Twitter: [@evvv_vvve](https://twitter.com/evvv_vvve)
+Twitter: [@starrzycat](https://twitter.com/starrzycat)
 
-Email: evvv_vvve@proton.me
+Email: starrzycat@proton.me
 
 Discord: 
 
